@@ -10,4 +10,6 @@ dependencies:
   - ipykernel
   - torchtext
   - pandas
+  - matplotlib
+  - scikit-learn
 prefix: C:\Users\setul\miniconda3\envs\talk-berty
