@@ -1,0 +1,16 @@
+name: talk-berty
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - pytorch
+  - pytorch-cuda=12.1
+  - torchaudio
+  - torchvision
+  - ipykernel
+  - torchtext
+  - pandas
+  - matplotlib
+  - scikit-learn
+  - nltk
+prefix: C:\Users\setul\miniconda3\envs\talk-berty
