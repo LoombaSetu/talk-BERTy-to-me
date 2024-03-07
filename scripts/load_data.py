@@ -1,8 +1,10 @@
 import os
+from typing import Sized
 import pandas as pd
 import torch
 from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
+from torch.utils.data import Sampler, DataLoader
 os.chdir("D:/University/Projects/AML/talk-berty-to-me") #Change path to root directory of project
 
 class TextCorpus():
@@ -33,7 +35,7 @@ class TextCorpus():
         train_iter = iter(self.data.loc[:,'text'] + self.data.loc[:,'title']
                            + self.data.loc[:,'genre_one_hot'])
         for text in train_iter:
-            if type(text) is not str:
+            if not isinstance(text, str):
                 continue
             yield tokenizer(text)
 
@@ -43,3 +45,19 @@ class TextCorpus():
         vocab.set_default_index(vocab["<unk>"])
         torch.save(vocab, 'vocab' + self.flag + '.pth')
         return vocab
+
+
+class TextSampler(Sampler):
+    def __init__(self, corpus_data, batch_size):
+        self.corpus = corpus_data
+        self.batch_size = batch_size
+
+    def __iter__(self):
+        num_batches = len(self.corpus)//self.batch_size
+        for i in range(num_batches):
+            for j in range(self.batch_size):
+                yield (j*num_batches + i)   #From HW4
+
+    def __len__(self):
+        return (len(self.corpus)//self.batch_size)*self.batch_size
+

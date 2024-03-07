@@ -41,17 +41,11 @@ train_df = corpus.data
 train_df.loc[:, "seq_pairs"] = train_df["text"].apply(create_seq2seq_labels)
 train_df.drop(columns=["text"], inplace=True)
 train_df = train_df.explode("seq_pairs").reset_index(drop=True)
-print(train_df.columns)
-print(train_df.loc[:, "seq_pairs"][:1])
 vocab = corpus.vocab
 
 dataloader = torch.utils.data.DataLoader(
     train_df.values, batch_size=8, shuffle=False, collate_fn=collate_batch
 )
-for i, (title, input_seq, output_seq, genre) in enumerate(dataloader):
-    print(title)
-    print(input_seq)
-    print(output_seq)
-    print(genre)
-    if i == 0:
-        break
+VECTOR_CACHE_DIR = '/Users/setul/mlpp23/.vector_cache'
+glove = torchtext.vocab.GloVe('6B', cache=VECTOR_CACHE_DIR)
+glove_vectors = glove.get_vecs_by_tokens(vocab_words.get_itos())
